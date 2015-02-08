@@ -34,6 +34,7 @@ private:
 	static const string MESSAGE_IS_EMPTY;
 	static const string MESSAGE_CANNOT_DELETE;
 	static const string MESSAGE_CANNOT_ADD;
+	static const string MESSAGE_SORTED;
 
 	static char buffer[255];
 	static vector<string> userInputs;

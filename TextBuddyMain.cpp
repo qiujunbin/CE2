@@ -45,6 +45,9 @@ const string TextBuddy::MESSAGE_LINE_ERROR = "ERROR: Unable to find the line spe
 const string TextBuddy::MESSAGE_IS_EMPTY = "%s is empty.";
 const string TextBuddy::MESSAGE_CANNOT_DELETE = "There is no inputs to delete. Please Specify.";
 const string TextBuddy::MESSAGE_CANNOT_ADD = "There is no inputs to add. Please Specify.";
+const string TextBuddy::MESSAGE_SORTED = "Contents in %s have been alphabetically sorted.";
+const string TextBuddy::MESSAGE_NOT_FOUND = "Words not found in any line.";
+const string TextBuddy::MESSAGE_FOUND = "Words have been found in line %s";
 
 char TextBuddy::buffer[255] = "";
 vector<string> TextBuddy::userInputs;
