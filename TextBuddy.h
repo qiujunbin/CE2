@@ -35,6 +35,8 @@ private:
 	static const string MESSAGE_CANNOT_DELETE;
 	static const string MESSAGE_CANNOT_ADD;
 	static const string MESSAGE_SORTED;
+	static const string MESSAGE_NOT_FOUND;
+	static const string MESSAGE_FOUND;
 
 	static char buffer[255];
 	static vector<string> userInputs;
