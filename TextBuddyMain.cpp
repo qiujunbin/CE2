@@ -95,6 +95,8 @@ string TextBuddy::executeCommand(string nameOfFile, string userCommand){
 		return deleteInputs(nameOfFile, restOfInput);
 	case CLEAR:
 		return clear(nameOfFile, restOfInput);
+	case SORT:
+		return sortAlphabetical(nameOfFile);
 	case EXIT:
 		exit(0);
 	default:
@@ -166,6 +168,14 @@ string TextBuddy::clear(string nameOfFile, string restOfInput){
 	return buffer;
 }
 
+string TextBuddy::sortAlphabetical(string nameOfFile){
+
+	sort(userInputs.begin(), userInputs.end());
+
+	sprintf_s(buffer, MESSAGE_SORTED.c_str(), nameOfFile.c_str());
+	return buffer;
+}
+
 //this function returns the number that the user wants to delete in order for the deleteInputs function to work
 vector<string>::iterator TextBuddy::getLineNumber(string nameOfFile, string userCommand){
 
@@ -199,6 +209,9 @@ TextBuddy::COMMAND_TYPE TextBuddy::determineCommandType(string command) {
 	}
 	else if (command == "clear") {
 		return COMMAND_TYPE::CLEAR;
+	}
+	else if (command == "sort") {
+		return COMMAND_TYPE::SORT;
 	}
 	else if (command == "exit") {
 		return COMMAND_TYPE::EXIT;

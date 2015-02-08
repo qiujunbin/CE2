@@ -17,7 +17,7 @@ class TextBuddy{
 public:
 	// These are the possible command types
 	enum COMMAND_TYPE {
-		ADD, DISPLAY, DELETE, CLEAR, EXIT, ERROR
+		ADD, DISPLAY, DELETE, CLEAR, SORT, EXIT, ERROR
 	};
 
 	static void main(int argc, string argv);
@@ -48,6 +48,7 @@ private:
 	static string displayInputs(string nameOfFile);
 	static string deleteInputs(string nameOfFile, string restOfInput);
 	static string clear(string nameOfFile, string restOfInput);
+	static string sortAlphabetical(string nameOfFile);
 
 	static void showToUser(string text);
 	static void validCommandLineInterface(int argc);
