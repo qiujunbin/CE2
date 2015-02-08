@@ -98,7 +98,7 @@ string TextBuddy::executeCommand(string nameOfFile, string userCommand){
 	case SORT:
 		return sortAlphabetical(nameOfFile);
 	case SEARCH:
-		return searchFile(nameOfFile, command);
+		return searchWholeFile(nameOfFile, restOfInput);
 	case EXIT:
 		exit(0);
 	default:
@@ -178,11 +178,25 @@ string TextBuddy::sortAlphabetical(string nameOfFile){
 	return buffer;
 }
 
-string TextBuddy::searchFile(string nameOfFile, string command){
+string TextBuddy::searchWholeFile(string nameOfFile, string keyWord){
+
+	int lineNumber = 0;
+	int sizeOfFile = userInputs.size();
+
+	for (int i = 0; i < sizeOfFile; i++){
+
+		string linesInFile = to_string(i);
+		string searchResult = searchEachLine(nameOfFile, keyWord, linesInFile);
+		//return inputs from searchEachString function to determine the search result
+	}
 
 
 	sprintf_s(buffer, MESSAGE_FOUND.c_str(), nameOfFile.c_str());
 	return buffer;
+}
+
+string TextBuddy::searchEachLine(string nameOfFile, string keyWord, string lineNumber){
+
 }
 
 

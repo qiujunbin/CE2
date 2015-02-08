@@ -50,8 +50,8 @@ private:
 	static string clear(string nameOfFile, string restOfInput);
 	static string sortAlphabetical(string nameOfFile);
 
-	static string searchFile(string nameOfFile, string restOfInput);
-	static string searchLine(string nameOfFile, string restOfInput, string lineNumber);
+	static string searchWholeFile(string nameOfFile, string restOfInput);
+	static string searchEachLine(string nameOfFile, string restOfInput, string lineNumber);
 
 	static void showToUser(string text);
 	static void validCommandLineInterface(int argc);
