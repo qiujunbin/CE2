@@ -48,7 +48,10 @@ private:
 	static string displayInputs(string nameOfFile);
 	static string deleteInputs(string nameOfFile, string restOfInput);
 	static string clear(string nameOfFile, string restOfInput);
-	static string sortAlphabetical(string nameOfFile);
+
+
+	//static string sortAlphabetical(vector<string> nameOfVector);
+	//static void checkSorted(string nameOfFile);
 
 	static string searchWholeFile(string nameOfFile, string restOfInput);
 	static string searchEachLine(string nameOfFile, string restOfInput, string lineNumber);
@@ -60,6 +63,7 @@ private:
 	static string executeCommand(string nameOfFile, string userCommand);
 	static string getFirstWord(string userCommand);
 	static string excludeFirstWord(string userCommand);
+
 	static vector<string>::iterator getLineNumber(string nameOfFile, string userCommand);
 	static COMMAND_TYPE determineCommandType(string command);
 

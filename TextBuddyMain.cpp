@@ -1,5 +1,5 @@
 //This class is used to store and retrieve the commands entered by the user in the following way:
-//the user can enter the commands like "add", "delete", "display", "clear" and "exit".
+//the user can enter the commands like "add", "delete", "display", "clear", "sort", "search" and "exit",
 //Any other commands will be deem to be invalid and will be followed by an error message.
 //user will be deemed to be entering inputs following commands as mentioned above.
 //there will be a save function after the user exits the programme, which will save the user inputs in the user specified <filename>.txt
@@ -15,9 +15,21 @@
 // added to <filename>.txt: "a quick brown fox"
 // command: add jumped over a lazy dog
 // added to <filename>.txt: "jumped over a lazy dog"
+// command: add based on his instinct
+// added to <filename>.txt: "based on his instinct"
 // command: display
 // 1. a quick brown fox
 // 2. jumped over a lazy dog
+// 3. based on his instinct
+// command: sort
+// Contents in <filename>.txt have been alphabetically sorted.
+// command: display
+// 1. a quick brown fox
+// 2. based on his instinct
+// 3. jumped over a lazy dog
+// command: search instinct
+// 1. based on his instinct
+// Words have been found in lines present in <filename>.txt
 // command: delete 1
 // deleted from <textfile>.txt: "a quick brown fox"
 // command: display
@@ -47,7 +59,7 @@ const string TextBuddy::MESSAGE_CANNOT_DELETE = "There is no inputs to delete. P
 const string TextBuddy::MESSAGE_CANNOT_ADD = "There is no inputs to add. Please Specify.";
 const string TextBuddy::MESSAGE_SORTED = "Contents in %s have been alphabetically sorted.";
 const string TextBuddy::MESSAGE_NOT_FOUND = "Words not found in any line.";
-const string TextBuddy::MESSAGE_FOUND = "Words have been found in line %s";
+const string TextBuddy::MESSAGE_FOUND = "Words have been found in lines present in %s";
 
 char TextBuddy::buffer[255] = "";
 vector<string> TextBuddy::userInputs;
@@ -95,10 +107,12 @@ string TextBuddy::executeCommand(string nameOfFile, string userCommand){
 		return deleteInputs(nameOfFile, restOfInput);
 	case CLEAR:
 		return clear(nameOfFile, restOfInput);
+		/*
 	case SORT:
 		return sortAlphabetical(nameOfFile);
 	case SEARCH:
 		return searchWholeFile(nameOfFile, restOfInput);
+		*/
 	case EXIT:
 		exit(0);
 	default:
@@ -170,9 +184,57 @@ string TextBuddy::clear(string nameOfFile, string restOfInput){
 	return buffer;
 }
 
+
+
+void sort(vector<string>&nameOfVector){
+
+	//implementing a bubble sort
+	for (int i = 0; i < nameOfVector.size(); i++){
+		for (int j = 1; j < nameOfVector.size(); j++){
+			if (nameOfVector[j - 1][0] > nameOfVector[j][0]){
+				string temp = nameOfVector[j - 1];
+				nameOfVector[j - 1] = nameOfVector[j];
+				nameOfVector[j] = temp;
+			}
+		}
+	}
+}
+
+void printVector(vector<string> nameOfVector){
+
+	for (int i = 0; i < nameOfVector.size(); i++){
+		cout << nameOfVector[i] << endl;
+	}
+}
+
+void checkSorted(){
+
+	vector<string> tempVectorString;
+
+	//this test for the sorting algorithm for the 1st alphabet
+	tempVectorString.push_back("bbc");
+	tempVectorString.push_back("dbc");
+	tempVectorString.push_back("abc");
+	tempVectorString.push_back("cbc");
+	printVector(tempVectorString);
+	sort(tempVectorString);
+	cout << "After sorting:" << endl;
+	printVector(tempVectorString);
+
+
+}
+
+
+/*
+bool isFound(string nameOfFile, string inputs){
+
+	vector<string>::iterator iter = 
+}
+*/
+/*
 string TextBuddy::sortAlphabetical(string nameOfFile){
 
-	sort(userInputs.begin(), userInputs.end());
+	//stable_sort(userInputs.begin(), userInputs.end());
 
 	sprintf_s(buffer, MESSAGE_SORTED.c_str(), nameOfFile.c_str());
 	return buffer;
@@ -180,25 +242,47 @@ string TextBuddy::sortAlphabetical(string nameOfFile){
 
 string TextBuddy::searchWholeFile(string nameOfFile, string keyWord){
 
+	bool searchFound = false;
 	int lineNumber = 0;
 	int sizeOfFile = userInputs.size();
 
-	for (int i = 0; i < sizeOfFile; i++){
+	for (int i = 1; i <= sizeOfFile; i++){
 
 		string linesInFile = to_string(i);
 		string searchResult = searchEachLine(nameOfFile, keyWord, linesInFile);
-		//return inputs from searchEachString function to determine the search result
+		if (searchResult != string()){
+			searchFound = true;
+			++lineNumber;
+			cout << lineNumber << ". " << searchResult << endl;
+		}
 	}
 
+	if (searchFound){
+		sprintf_s(buffer, MESSAGE_FOUND.c_str(), nameOfFile.c_str());
+	}
+	else{
+		sprintf_s(buffer, MESSAGE_NOT_FOUND.c_str());
+	}
 
-	sprintf_s(buffer, MESSAGE_FOUND.c_str(), nameOfFile.c_str());
 	return buffer;
+
 }
 
 string TextBuddy::searchEachLine(string nameOfFile, string keyWord, string lineNumber){
 
-}
+	string::iterator checkLine;
+	vector<string>::iterator iter = getLineNumber(nameOfFile, lineNumber);
 
+	checkLine = search (iter->begin(), iter->end(), keyWord.begin(), keyWord.end());
+
+	if (checkLine == iter->end() || iter->end() == iter->begin()){
+		return string();
+	}
+	else
+		return *iter;
+
+}
+*/
 
 
 //this function returns the number that the user wants to delete in order for the deleteInputs function to work
@@ -309,23 +393,19 @@ void TextBuddy::showToUser(string text) {
 	cout << text << endl;
 }
 
-static void displayLine(int i, string outputLine){
-
-	cout << i << ". " << outputLine << endl;
-}
 
 //this is the entry point of the programme. 
 int main(int argc, char* argv[]){
 	//check if the user have input the correct number of arguments
-
+	checkSorted();
 	if (argc == 1){
 		string fileName;
 		cout << "Enter a file name: ";
 		getline(cin, fileName);
-		TextBuddy::main(2, fileName);
+		//TextBuddy::main(2, fileName);
 	}
 	else {
-		TextBuddy::main(argc, argv[1]);
+		//TextBuddy::main(argc, argv[1]);
 	}
 	return 0;
 }
