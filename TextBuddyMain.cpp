@@ -107,9 +107,9 @@ string TextBuddy::executeCommand(string nameOfFile, string userCommand){
 		return deleteInputs(nameOfFile, restOfInput);
 	case CLEAR:
 		return clear(nameOfFile, restOfInput);
-		/*
 	case SORT:
-		return sortAlphabetical(nameOfFile);
+		return sort(nameOfFile);
+		/*
 	case SEARCH:
 		return searchWholeFile(nameOfFile, restOfInput);
 		*/
@@ -185,39 +185,44 @@ string TextBuddy::clear(string nameOfFile, string restOfInput){
 }
 
 
-void sort(vector<string>&nameOfVector){
+
+string TextBuddy::sort(string nameOfFile){
 
 	//implementing a bubble sort
-	for (int i = 0; i < nameOfVector.size(); i++){
-		for (int j = 1; j < nameOfVector.size(); j++){
+	for (int i = 0; i < userInputs.size(); i++){
+		for (int j = 1; j < userInputs.size(); j++){
 
-			if (isupper(nameOfVector[j - 1][0]) || isupper(nameOfVector[j][0])){
-				char convertFirstCharacter = tolower(nameOfVector[j - 1][0]);
-				char convertSecondCharacter = tolower(nameOfVector[j][0]);
+			if (isupper(userInputs[j - 1][0]) || isupper(userInputs[j][0])){
+				char convertFirstCharacter = tolower(userInputs[j - 1][0]);
+				char convertSecondCharacter = tolower(userInputs[j][0]);
 
 				if (convertFirstCharacter > convertSecondCharacter){
-					string temp = nameOfVector[j - 1];
-					nameOfVector[j - 1] = nameOfVector[j];
-					nameOfVector[j] = temp;
+					string temp = userInputs[j - 1];
+					userInputs[j - 1] = userInputs[j];
+					userInputs[j] = temp;
 				}
 				else if (convertFirstCharacter - convertSecondCharacter == 0){
-					if (isupper(nameOfVector[j][0]) && islower(nameOfVector[j - 1][0])){
-						string temp = nameOfVector[j - 1];
-						nameOfVector[j - 1] = nameOfVector[j];
-						nameOfVector[j] = temp;
+					if (isupper(userInputs[j][0]) && islower(userInputs[j - 1][0])){
+						string temp = userInputs[j - 1];
+						userInputs[j - 1] = userInputs[j];
+						userInputs[j] = temp;
 					}
 				}
 			}
 			else{
-				if (nameOfVector[j - 1][0] > nameOfVector[j][0]){
-					string temp = nameOfVector[j - 1];
-					nameOfVector[j - 1] = nameOfVector[j];
-					nameOfVector[j] = temp;
+				if (userInputs[j - 1][0] > userInputs[j][0]){
+					string temp = userInputs[j - 1];
+					userInputs[j - 1] = userInputs[j];
+					userInputs[j] = temp;
 				}
 			}
 		}
 	}
+	sprintf_s(buffer, MESSAGE_SORTED.c_str(), nameOfFile.c_str());
+	return buffer;
 }
+
+/*
 
 //the search function will do a binary search with a sorted vector<string>
 bool binarySearch(vector<string>&nameOfVector, string keyWord){
@@ -276,8 +281,8 @@ bool search(vector<string>&nameOfVector, string keyWord){
 		return false;
 
 }
-
-
+*/
+/*
 void printVector(vector<string> nameOfVector){
 
 	for (int i = 0; i < nameOfVector.size(); i++){
@@ -285,12 +290,13 @@ void printVector(vector<string> nameOfVector){
 	}
 }
 
+
 //this will be the TDD for the search function present written above.
 void isFound(){
 
 	vector<string> tempVectorString;
 
-	/*
+
 	//this block of code will attempt to find the exact keyword and phrases provided by the user
 	tempVectorString.push_back("Hi, this is a search");
 	tempVectorString.push_back("Find the little brown fox");
@@ -304,7 +310,7 @@ void isFound(){
 	else{
 		cout << "The keyword who jump over the wall is not found!" << endl;
 	}
-	*/
+
 	
 	//this block of code will attempt to find the exact keyword and phrases provided by the user
 	tempVectorString.push_back("Hi, this is a search");
@@ -321,7 +327,9 @@ void isFound(){
 	}
 	
 }
+*/
 
+/*
 // This is the TDD functions which will test the sort function written above
 void checkSorted(){
 
@@ -350,12 +358,12 @@ void checkSorted(){
 
 }
 
-/*
 bool isFound(string nameOfFile, string inputs){
 
 	vector<string>::iterator iter = 
 }
 */
+
 /*
 string TextBuddy::sortAlphabetical(string nameOfFile){
 
@@ -523,15 +531,15 @@ void TextBuddy::showToUser(string text) {
 int main(int argc, char* argv[]){
 	//check if the user have input the correct number of arguments
 	//checkSorted();
-	isFound();
+	//isFound();
 	if (argc == 1){
 		string fileName;
 		cout << "Enter a file name: ";
 		getline(cin, fileName);
-		//TextBuddy::main(2, fileName);
+		TextBuddy::main(2, fileName);
 	}
 	else {
-		//TextBuddy::main(argc, argv[1]);
+		TextBuddy::main(argc, argv[1]);
 	}
 	return 0;
 }

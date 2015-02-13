@@ -50,7 +50,7 @@ private:
 	static string clear(string nameOfFile, string restOfInput);
 
 
-	//static string sortAlphabetical(vector<string> nameOfVector);
+	static string sort(string nameOfFile);
 	//static void checkSorted(string nameOfFile);
 
 	static string searchWholeFile(string nameOfFile, string restOfInput);
