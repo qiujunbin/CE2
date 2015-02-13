@@ -220,7 +220,7 @@ void sort(vector<string>&nameOfVector){
 }
 
 //the search function will do a binary search with a sorted vector<string>
-bool search(vector<string>&nameOfVector, string keyWord){
+bool binarySearch(vector<string>&nameOfVector, string keyWord){
 
 	sort(nameOfVector);
 	size_t mid, left = 0;
@@ -241,6 +241,42 @@ bool search(vector<string>&nameOfVector, string keyWord){
 	return false;
 }
 
+bool search(vector<string>&nameOfVector, string keyWord){
+
+
+	if (binarySearch(nameOfVector, keyWord)){
+		return true;
+	}
+	else{
+		//now we attempt to break the words of each string
+		for (int i = 0; i < nameOfVector.size(); i++){
+
+			unsigned int tStart = 0;
+			unsigned int tEnd = 0;
+			string temp = "";
+			tEnd = nameOfVector[i].find_first_of(" ,;");
+			while (tEnd != string::npos) {
+				temp = nameOfVector[i].substr(tStart, tEnd - tStart);
+				tStart = tEnd + 1; // start of a new word
+				if (keyWord == temp){
+					return true;
+				}
+				else{
+					tEnd = nameOfVector[i].find_first_of(" ,;", tStart);
+				}
+			}
+			if (tStart < nameOfVector[i].size()){
+				temp = nameOfVector[i].substr(tStart);
+				if (keyWord == temp){
+					return true;
+				}
+			}
+		}
+	}
+		return false;
+
+}
+
 
 void printVector(vector<string> nameOfVector){
 
@@ -254,6 +290,7 @@ void isFound(){
 
 	vector<string> tempVectorString;
 
+	/*
 	//this block of code will attempt to find the exact keyword and phrases provided by the user
 	tempVectorString.push_back("Hi, this is a search");
 	tempVectorString.push_back("Find the little brown fox");
@@ -262,12 +299,27 @@ void isFound(){
 	printVector(tempVectorString);
 	string keyWord = "who jump over the wall";
 	if (search(tempVectorString, keyWord)){
-		cout << "The keyword is found!" << endl;
+		cout << "The keyword who jump over the wall is found!" << endl;
 	}
 	else{
-		cout << "The keyword is not found!" << endl;
+		cout << "The keyword who jump over the wall is not found!" << endl;
 	}
-
+	*/
+	
+	//this block of code will attempt to find the exact keyword and phrases provided by the user
+	tempVectorString.push_back("Hi, this is a search");
+	tempVectorString.push_back("Find the little brown fox");
+	tempVectorString.push_back("who jump over the wall");
+	tempVectorString.push_back("can you find it?");
+	printVector(tempVectorString);
+	string keyWord1 = "jump";
+	if (search(tempVectorString, keyWord1)){
+		cout << "The keyword jump is found!" << endl;
+	}
+	else{
+		cout << "The keyword jump is not found!" << endl;
+	}
+	
 }
 
 // This is the TDD functions which will test the sort function written above
