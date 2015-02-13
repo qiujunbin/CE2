@@ -191,10 +191,30 @@ void sort(vector<string>&nameOfVector){
 	//implementing a bubble sort
 	for (int i = 0; i < nameOfVector.size(); i++){
 		for (int j = 1; j < nameOfVector.size(); j++){
-			if (nameOfVector[j - 1][0] > nameOfVector[j][0]){
-				string temp = nameOfVector[j - 1];
-				nameOfVector[j - 1] = nameOfVector[j];
-				nameOfVector[j] = temp;
+
+			if (isupper(nameOfVector[j - 1][0]) || isupper(nameOfVector[j][0])){
+				char convertFirstCharacter = tolower(nameOfVector[j - 1][0]);
+				char convertSecondCharacter = tolower(nameOfVector[j][0]);
+
+				if (convertFirstCharacter > convertSecondCharacter){
+					string temp = nameOfVector[j - 1];
+					nameOfVector[j - 1] = nameOfVector[j];
+					nameOfVector[j] = temp;
+				}
+				else if (convertFirstCharacter - convertSecondCharacter == 0){
+					if (isupper(nameOfVector[j][0]) && islower(nameOfVector[j - 1][0])){
+						string temp = nameOfVector[j - 1];
+						nameOfVector[j - 1] = nameOfVector[j];
+						nameOfVector[j] = temp;
+					}
+				}
+			}
+			else{
+				if (nameOfVector[j - 1][0] > nameOfVector[j][0]){
+					string temp = nameOfVector[j - 1];
+					nameOfVector[j - 1] = nameOfVector[j];
+					nameOfVector[j] = temp;
+				}
 			}
 		}
 	}
@@ -212,10 +232,21 @@ void checkSorted(){
 	vector<string> tempVectorString;
 
 	//this test for the sorting algorithm for the 1st alphabet
+	/*
 	tempVectorString.push_back("bbc");
 	tempVectorString.push_back("dbc");
 	tempVectorString.push_back("abc");
 	tempVectorString.push_back("cbc");
+	printVector(tempVectorString);
+	sort(tempVectorString);
+	cout << "After sorting:" << endl;
+	printVector(tempVectorString);
+	*/
+	//this test will try to sort and solve the problem of capital letters present in the vector
+	tempVectorString.push_back("BBC");
+	tempVectorString.push_back("bbc");
+	tempVectorString.push_back("ABC");
+	tempVectorString.push_back("abc");
 	printVector(tempVectorString);
 	sort(tempVectorString);
 	cout << "After sorting:" << endl;
