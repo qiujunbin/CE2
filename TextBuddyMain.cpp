@@ -185,7 +185,6 @@ string TextBuddy::clear(string nameOfFile, string restOfInput){
 }
 
 
-
 void sort(vector<string>&nameOfVector){
 
 	//implementing a bubble sort
@@ -220,6 +219,29 @@ void sort(vector<string>&nameOfVector){
 	}
 }
 
+//the search function will do a binary search with a sorted vector<string>
+bool search(vector<string>&nameOfVector, string keyWord){
+
+	sort(nameOfVector);
+	size_t mid, left = 0;
+	size_t right = nameOfVector.size(); // one position passed the right end
+	while (left < right) {
+		mid = left + (right - left) / 2;
+		if (keyWord > nameOfVector[mid]){
+			left = mid + 1;
+		}
+		else if (keyWord < nameOfVector[mid]){
+			right = mid;
+		}
+		else {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
 void printVector(vector<string> nameOfVector){
 
 	for (int i = 0; i < nameOfVector.size(); i++){
@@ -227,12 +249,34 @@ void printVector(vector<string> nameOfVector){
 	}
 }
 
+//this will be the TDD for the search function present written above.
+void isFound(){
+
+	vector<string> tempVectorString;
+
+	//this block of code will attempt to find the exact keyword and phrases provided by the user
+	tempVectorString.push_back("Hi, this is a search");
+	tempVectorString.push_back("Find the little brown fox");
+	tempVectorString.push_back("who jump over the wall");
+	tempVectorString.push_back("can you find it?");
+	printVector(tempVectorString);
+	string keyWord = "who jump over the wall";
+	if (search(tempVectorString, keyWord)){
+		cout << "The keyword is found!" << endl;
+	}
+	else{
+		cout << "The keyword is not found!" << endl;
+	}
+
+}
+
+// This is the TDD functions which will test the sort function written above
 void checkSorted(){
 
 	vector<string> tempVectorString;
 
 	//this test for the sorting algorithm for the 1st alphabet
-	/*
+
 	tempVectorString.push_back("bbc");
 	tempVectorString.push_back("dbc");
 	tempVectorString.push_back("abc");
@@ -241,7 +285,7 @@ void checkSorted(){
 	sort(tempVectorString);
 	cout << "After sorting:" << endl;
 	printVector(tempVectorString);
-	*/
+
 	//this test will try to sort and solve the problem of capital letters present in the vector
 	tempVectorString.push_back("BBC");
 	tempVectorString.push_back("bbc");
@@ -252,9 +296,7 @@ void checkSorted(){
 	cout << "After sorting:" << endl;
 	printVector(tempVectorString);
 
-
 }
-
 
 /*
 bool isFound(string nameOfFile, string inputs){
@@ -428,7 +470,8 @@ void TextBuddy::showToUser(string text) {
 //this is the entry point of the programme. 
 int main(int argc, char* argv[]){
 	//check if the user have input the correct number of arguments
-	checkSorted();
+	//checkSorted();
+	isFound();
 	if (argc == 1){
 		string fileName;
 		cout << "Enter a file name: ";
