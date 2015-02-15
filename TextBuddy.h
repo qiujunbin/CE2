@@ -16,14 +16,14 @@ class TextBuddy{
 
 public:
 	// These are the possible command types
-	enum COMMAND_TYPE {
+	enum commandType {
 		ADD, DISPLAY, DELETE, CLEAR, SORT, SEARCH, EXIT, ERROR
 	};
 
 	static void main(int argc, string argv);
 
 private:
-	static const string WELCOME_MESSAGE;
+	static const string MESSAGE_WELCOME;
 	static const string MESSAGE_ADDED;
 	static const string MESSAGE_DELETED;
 	static const string MESSAGE_CLEARED;
@@ -51,21 +51,32 @@ private:
 
 
 	static string sort(string nameOfFile);
-	//static void checkSorted(string nameOfFile);
+	static void swap(int target);
+	static bool checkAnyUpper(int target);
+	static bool checkSameCharacter(char firstCharacter, char secondCharacter);
+	static bool upperCaseSwap(int target);
+	static bool lowerCaseSwap(int target);
+
+	static bool binarySearch(string nameOfFile, string keyWord);
+	static string search(string nameOfFile, string keyWord);
+	static bool seperateString(string keyWord);
+
 
 	static string searchWholeFile(string nameOfFile, string restOfInput);
 	static string searchEachLine(string nameOfFile, string restOfInput, string lineNumber);
 
 	static void showToUser(string text);
-	static void validCommandLineInterface(int argc);
+	static void print(int lineNumber, string message);
+	static void commandLineInterface(int argc);
 	static void initialiseUserInput(string nameOfFile);
+	static void getFileInputs(string nameOfFile);
 
 	static string executeCommand(string nameOfFile, string userCommand);
 	static string getFirstWord(string userCommand);
 	static string excludeFirstWord(string userCommand);
 
 	static vector<string>::iterator getLineNumber(string nameOfFile, string userCommand);
-	static COMMAND_TYPE determineCommandType(string command);
+	static commandType determineCommandType(string command);
 
 };
 

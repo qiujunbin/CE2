@@ -47,7 +47,7 @@
 using namespace std;
 
 // These are the static variables that cannot be initialize in header file
-const string TextBuddy::WELCOME_MESSAGE = "Welcome to TextBuddy. %s is ready for use";
+const string TextBuddy::MESSAGE_WELCOME = "Welcome to TextBuddy. %s is ready for use";
 const string TextBuddy::MESSAGE_ADDED = "added to %s: \"%s\"";
 const string TextBuddy::MESSAGE_DELETED = "deleted from %s: \"%s\"";
 const string TextBuddy::MESSAGE_CLEARED = "all content deleted from %s";
@@ -67,9 +67,9 @@ vector<string> TextBuddy::userInputs;
 
 void TextBuddy::main(int argc, string argv){
 
-	validCommandLineInterface(argc);
+	commandLineInterface(argc);
 	initialiseUserInput(argv);
-	sprintf_s(buffer, WELCOME_MESSAGE.c_str(), argv.c_str());
+	sprintf_s(buffer, MESSAGE_WELCOME.c_str(), argv.c_str());
 	showToUser(buffer);
 	enterCommand(argv);
 
@@ -96,7 +96,7 @@ string TextBuddy::executeCommand(string nameOfFile, string userCommand){
 
 	string command = getFirstWord(userCommand);
 	string restOfInput = excludeFirstWord(userCommand);
-	COMMAND_TYPE typeOfCommand = determineCommandType(command);
+	commandType typeOfCommand = determineCommandType(command);
 
 	switch (typeOfCommand){
 	case ADD :
@@ -109,10 +109,8 @@ string TextBuddy::executeCommand(string nameOfFile, string userCommand){
 		return clear(nameOfFile, restOfInput);
 	case SORT:
 		return sort(nameOfFile);
-		/*
 	case SEARCH:
-		return searchWholeFile(nameOfFile, restOfInput);
-		*/
+		return search(nameOfFile, restOfInput);
 	case EXIT:
 		exit(0);
 	default:
@@ -131,6 +129,7 @@ string TextBuddy::addInputs(string nameOfFile, string restOfInput){
 	return buffer;
 }
 
+
 string TextBuddy::displayInputs(string nameOfFile){
 
 	if (userInputs.empty()){
@@ -138,32 +137,8 @@ string TextBuddy::displayInputs(string nameOfFile){
 		return buffer;
 	}
 	else{
-
-		ifstream readFile;
-		string firstOutputLine, secondOutputLine;
-		int numberOfLine = 0;
-
-		readFile.open(nameOfFile);
-
-		if (!readFile.eof()){
-			numberOfLine = 1;
-			getline(readFile, firstOutputLine);
-
-			if (!readFile.eof()){
-
-				for (numberOfLine = 1; getline(readFile, secondOutputLine); numberOfLine++) {
-
-					cout << numberOfLine << ". " << firstOutputLine << endl;
-					firstOutputLine = secondOutputLine;
-				}
-			}
-
-			cout << numberOfLine << ". " << firstOutputLine;
-		}
-
-		readFile.close();
+		getFileInputs(nameOfFile);
 	}
-
 	return "";
 }
 
@@ -184,7 +159,28 @@ string TextBuddy::clear(string nameOfFile, string restOfInput){
 	return buffer;
 }
 
+void TextBuddy::getFileInputs(string nameOfFile){
 
+	ifstream readFile;
+	string firstOutputLine, secondOutputLine;
+
+	readFile.open(nameOfFile);
+
+	if (!readFile.eof()){
+		int numberOfLine = 1;
+		getline(readFile, firstOutputLine);
+
+		for (numberOfLine = 1; getline(readFile, secondOutputLine); numberOfLine++) {
+
+			print(numberOfLine, firstOutputLine);
+			firstOutputLine = secondOutputLine;
+		}
+
+		print(numberOfLine, firstOutputLine);
+	}
+
+	readFile.close();
+}
 
 string TextBuddy::sort(string nameOfFile){
 
@@ -192,28 +188,22 @@ string TextBuddy::sort(string nameOfFile){
 	for (int i = 0; i < userInputs.size(); i++){
 		for (int j = 1; j < userInputs.size(); j++){
 
-			if (isupper(userInputs[j - 1][0]) || isupper(userInputs[j][0])){
-				char convertFirstCharacter = tolower(userInputs[j - 1][0]);
-				char convertSecondCharacter = tolower(userInputs[j][0]);
+			if (checkAnyUpper(j)){
+				char firstCharacter = tolower(userInputs[j - 1][0]);
+				char secondCharacter = tolower(userInputs[j][0]);
 
-				if (convertFirstCharacter > convertSecondCharacter){
-					string temp = userInputs[j - 1];
-					userInputs[j - 1] = userInputs[j];
-					userInputs[j] = temp;
+				if (firstCharacter > secondCharacter){
+					swap(j);
 				}
-				else if (convertFirstCharacter - convertSecondCharacter == 0){
-					if (isupper(userInputs[j][0]) && islower(userInputs[j - 1][0])){
-						string temp = userInputs[j - 1];
-						userInputs[j - 1] = userInputs[j];
-						userInputs[j] = temp;
+				else if (checkSameCharacter(firstCharacter, secondCharacter)){
+					if (upperCaseSwap(j)){
+						swap(j);
 					}
 				}
 			}
 			else{
-				if (userInputs[j - 1][0] > userInputs[j][0]){
-					string temp = userInputs[j - 1];
-					userInputs[j - 1] = userInputs[j];
-					userInputs[j] = temp;
+				if (lowerCaseSwap(j)){
+					swap(j);
 				}
 			}
 		}
@@ -222,20 +212,71 @@ string TextBuddy::sort(string nameOfFile){
 	return buffer;
 }
 
-/*
+string TextBuddy::search(string nameOfFile, string keyWord){
 
-//the search function will do a binary search with a sorted vector<string>
-bool binarySearch(vector<string>&nameOfVector, string keyWord){
+	bool searchResult = false;
+	if (binarySearch(nameOfFile, keyWord)){
+		searchResult = true;
+	}
+	else{
+		//now we attempt to break the words of each string
+		searchResult = seperateString(keyWord);
+	}
 
-	sort(nameOfVector);
+	if (searchResult){
+		sprintf_s(buffer, MESSAGE_FOUND.c_str(), nameOfFile.c_str());
+	}
+	else{
+		sprintf_s(buffer, MESSAGE_NOT_FOUND.c_str());
+	}
+
+	return buffer;
+
+}
+
+void TextBuddy::swap(int target){
+
+	string temp = userInputs[target - 1];
+	userInputs[target - 1] = userInputs[target];
+	userInputs[target] = temp;
+}
+
+bool TextBuddy::checkAnyUpper(int target){
+
+	return (isupper(userInputs[target - 1][0]) || isupper(userInputs[target][0]));
+}
+
+bool TextBuddy::checkSameCharacter(char firstCharacter, char secondCharacter){
+	
+	if (firstCharacter - secondCharacter == 0){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+bool TextBuddy::upperCaseSwap(int target){
+
+	return (isupper(userInputs[target][0]) && islower(userInputs[target - 1][0]));
+}
+
+bool TextBuddy::lowerCaseSwap(int target){
+
+	return (userInputs[target - 1][0] > userInputs[target][0]);
+}
+
+
+bool TextBuddy::binarySearch(string nameOfFile, string keyWord){
+
 	size_t mid, left = 0;
-	size_t right = nameOfVector.size(); // one position passed the right end
+	size_t right = userInputs.size(); // one position passed the right end
 	while (left < right) {
 		mid = left + (right - left) / 2;
-		if (keyWord > nameOfVector[mid]){
+		if (keyWord > userInputs[mid]){
 			left = mid + 1;
 		}
-		else if (keyWord < nameOfVector[mid]){
+		else if (keyWord < userInputs[mid]){
 			right = mid;
 		}
 		else {
@@ -246,42 +287,35 @@ bool binarySearch(vector<string>&nameOfVector, string keyWord){
 	return false;
 }
 
-bool search(vector<string>&nameOfVector, string keyWord){
+bool TextBuddy::seperateString(string keyWord){
+	
+	for (int i = 0; i < userInputs.size(); i++){
 
-
-	if (binarySearch(nameOfVector, keyWord)){
-		return true;
-	}
-	else{
-		//now we attempt to break the words of each string
-		for (int i = 0; i < nameOfVector.size(); i++){
-
-			unsigned int tStart = 0;
-			unsigned int tEnd = 0;
-			string temp = "";
-			tEnd = nameOfVector[i].find_first_of(" ,;");
-			while (tEnd != string::npos) {
-				temp = nameOfVector[i].substr(tStart, tEnd - tStart);
-				tStart = tEnd + 1; // start of a new word
-				if (keyWord == temp){
-					return true;
-				}
-				else{
-					tEnd = nameOfVector[i].find_first_of(" ,;", tStart);
-				}
+		unsigned int tStart = 0;
+		unsigned int tEnd = 0;
+		string temp = "";
+		tEnd = userInputs[i].find_first_of(" ,;");
+		while (tEnd != string::npos) {
+			temp = userInputs[i].substr(tStart, tEnd - tStart);
+			tStart = tEnd + 1; // start of a new word
+			if (keyWord == temp){
+				return true;
 			}
-			if (tStart < nameOfVector[i].size()){
-				temp = nameOfVector[i].substr(tStart);
-				if (keyWord == temp){
-					return true;
-				}
+			else{
+				tEnd = userInputs[i].find_first_of(" ,;", tStart);
+			}
+		}
+		if (tStart < userInputs[i].size()){
+			temp = userInputs[i].substr(tStart);
+			if (keyWord == temp){
+				return true;
 			}
 		}
 	}
-		return false;
 
 }
-*/
+
+
 /*
 void printVector(vector<string> nameOfVector){
 
@@ -295,7 +329,6 @@ void printVector(vector<string> nameOfVector){
 void isFound(){
 
 	vector<string> tempVectorString;
-
 
 	//this block of code will attempt to find the exact keyword and phrases provided by the user
 	tempVectorString.push_back("Hi, this is a search");
@@ -311,7 +344,6 @@ void isFound(){
 		cout << "The keyword who jump over the wall is not found!" << endl;
 	}
 
-	
 	//this block of code will attempt to find the exact keyword and phrases provided by the user
 	tempVectorString.push_back("Hi, this is a search");
 	tempVectorString.push_back("Find the little brown fox");
@@ -327,9 +359,8 @@ void isFound(){
 	}
 	
 }
-*/
 
-/*
+
 // This is the TDD functions which will test the sort function written above
 void checkSorted(){
 
@@ -364,64 +395,9 @@ bool isFound(string nameOfFile, string inputs){
 }
 */
 
-/*
-string TextBuddy::sortAlphabetical(string nameOfFile){
 
-	//stable_sort(userInputs.begin(), userInputs.end());
-
-	sprintf_s(buffer, MESSAGE_SORTED.c_str(), nameOfFile.c_str());
-	return buffer;
-}
-
-string TextBuddy::searchWholeFile(string nameOfFile, string keyWord){
-
-	bool searchFound = false;
-	int lineNumber = 0;
-	int sizeOfFile = userInputs.size();
-
-	for (int i = 1; i <= sizeOfFile; i++){
-
-		string linesInFile = to_string(i);
-		string searchResult = searchEachLine(nameOfFile, keyWord, linesInFile);
-		if (searchResult != string()){
-			searchFound = true;
-			++lineNumber;
-			cout << lineNumber << ". " << searchResult << endl;
-		}
-	}
-
-	if (searchFound){
-		sprintf_s(buffer, MESSAGE_FOUND.c_str(), nameOfFile.c_str());
-	}
-	else{
-		sprintf_s(buffer, MESSAGE_NOT_FOUND.c_str());
-	}
-
-	return buffer;
-
-}
-
-string TextBuddy::searchEachLine(string nameOfFile, string keyWord, string lineNumber){
-
-	string::iterator checkLine;
-	vector<string>::iterator iter = getLineNumber(nameOfFile, lineNumber);
-
-	checkLine = search (iter->begin(), iter->end(), keyWord.begin(), keyWord.end());
-
-	if (checkLine == iter->end() || iter->end() == iter->begin()){
-		return string();
-	}
-	else
-		return *iter;
-
-}
-*/
-
-
-//this function returns the number that the user wants to delete in order for the deleteInputs function to work
 vector<string>::iterator TextBuddy::getLineNumber(string nameOfFile, string userCommand){
 
-	//declared an integer iter for comparision with stoi function later
 	int iter = 1;
 	for (vector<string>::iterator i = userInputs.begin(); i != userInputs.end(); i++) {
 		if (iter == stoi(userCommand)) {
@@ -437,32 +413,32 @@ vector<string>::iterator TextBuddy::getLineNumber(string nameOfFile, string user
 	return userInputs.end();
 }
 
-TextBuddy::COMMAND_TYPE TextBuddy::determineCommandType(string command) {
+TextBuddy::commandType TextBuddy::determineCommandType(string command) {
 	transform(command.begin(), command.end(), command.begin(), ::tolower);
 
 	if (command == "add"){
-		return COMMAND_TYPE::ADD;
+		return commandType::ADD;
 	}
 	else if (command == "display") {
-		return COMMAND_TYPE::DISPLAY;
+		return commandType::DISPLAY;
 	}
 	else if (command == "delete") {
-		return COMMAND_TYPE::DELETE;
+		return commandType::DELETE;
 	}
 	else if (command == "clear") {
-		return COMMAND_TYPE::CLEAR;
+		return commandType::CLEAR;
 	}
 	else if (command == "sort") {
-		return COMMAND_TYPE::SORT;
+		return commandType::SORT;
 	}
 	else if (command == "search") {
-		return COMMAND_TYPE::SEARCH;
+		return commandType::SEARCH;
 	}
 	else if (command == "exit") {
-		return COMMAND_TYPE::EXIT;
+		return commandType::EXIT;
 	}
 	else
-		return COMMAND_TYPE::ERROR;
+		return commandType::ERROR;
 }
 
 string TextBuddy::getFirstWord(string userCommand){
@@ -511,7 +487,7 @@ void TextBuddy::initialiseUserInput(string nameOfFile){
 	return;
 }
 
-void TextBuddy::validCommandLineInterface(int argc){
+void TextBuddy::commandLineInterface(int argc){
 
 	if (argc > 2) {
 		showToUser(MESSAGE_ERROR);
@@ -520,16 +496,20 @@ void TextBuddy::validCommandLineInterface(int argc){
 	}
 }
 
-//acts as a printing function
 void TextBuddy::showToUser(string text) {
 
 	cout << text << endl;
 }
 
+void TextBuddy::print(int lineNumber, string message){
+
+	cout << lineNumber << ". " << message << endl;
+}
 
 //this is the entry point of the programme. 
 int main(int argc, char* argv[]){
 	//check if the user have input the correct number of arguments
+	
 	//checkSorted();
 	//isFound();
 	if (argc == 1){
