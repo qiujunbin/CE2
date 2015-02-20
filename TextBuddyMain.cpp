@@ -63,6 +63,7 @@ const string TextBuddy::MESSAGE_FOUND = "Words have been found in lines present 
 
 char TextBuddy::buffer[255] = "";
 vector<string> TextBuddy::userInputs;
+vector<string> TextBuddy::foundInputs;
 
 
 void TextBuddy::main(int argc, string argv){
@@ -224,6 +225,8 @@ string TextBuddy::search(string nameOfFile, string keyWord){
 	}
 
 	if (searchResult){
+		printSearchResult();
+		foundInputs.clear(); //ready vector for next command
 		sprintf_s(buffer, MESSAGE_FOUND.c_str(), nameOfFile.c_str());
 	}
 	else{
@@ -280,6 +283,7 @@ bool TextBuddy::binarySearch(string nameOfFile, string keyWord){
 			right = mid;
 		}
 		else {
+			foundInputs.push_back(userInputs[mid]);
 			return true;
 		}
 	}
@@ -299,7 +303,7 @@ bool TextBuddy::seperateString(string keyWord){
 			temp = userInputs[i].substr(tStart, tEnd - tStart);
 			tStart = tEnd + 1; // start of a new word
 			if (keyWord == temp){
-				return true;
+				foundInputs.push_back(userInputs[i]);
 			}
 			else{
 				tEnd = userInputs[i].find_first_of(" ,;", tStart);
@@ -308,9 +312,15 @@ bool TextBuddy::seperateString(string keyWord){
 		if (tStart < userInputs[i].size()){
 			temp = userInputs[i].substr(tStart);
 			if (keyWord == temp){
-				return true;
+				foundInputs.push_back(userInputs[i]);
 			}
 		}
+	}
+	if (foundInputs.size() != 0){
+		return true;
+	}
+	else{
+		return false;
 	}
 
 }
@@ -337,10 +347,10 @@ void isFound(){
 	tempVectorString.push_back("can you find it?");
 	printVector(tempVectorString);
 	string keyWord = "who jump over the wall";
-	if (search(tempVectorString, keyWord)){
+	if (search(tempVectorString, keyWord)){		//if code passes
 		cout << "The keyword who jump over the wall is found!" << endl;
 	}
-	else{
+	else{										//if code fails
 		cout << "The keyword who jump over the wall is not found!" << endl;
 	}
 
@@ -351,10 +361,10 @@ void isFound(){
 	tempVectorString.push_back("can you find it?");
 	printVector(tempVectorString);
 	string keyWord1 = "jump";
-	if (search(tempVectorString, keyWord1)){
+	if (search(tempVectorString, keyWord1)){	//if code passes
 		cout << "The keyword jump is found!" << endl;
 	}
-	else{
+	else{										//if code fails
 		cout << "The keyword jump is not found!" << endl;
 	}
 	
@@ -366,8 +376,7 @@ void checkSorted(){
 
 	vector<string> tempVectorString;
 
-	//this test for the sorting algorithm for the 1st alphabet
-
+	//this test for the sorting algorithm for the 1st alphabet (doesnt test for the presence of capital letter)
 	tempVectorString.push_back("bbc");
 	tempVectorString.push_back("dbc");
 	tempVectorString.push_back("abc");
@@ -378,6 +387,7 @@ void checkSorted(){
 	printVector(tempVectorString);
 
 	//this test will try to sort and solve the problem of capital letters present in the vector
+	//this bunch of inputs will arrange the code according to ABC,abc,BBC,bbc as the correct inputs.
 	tempVectorString.push_back("BBC");
 	tempVectorString.push_back("bbc");
 	tempVectorString.push_back("ABC");
@@ -389,10 +399,6 @@ void checkSorted(){
 
 }
 
-bool isFound(string nameOfFile, string inputs){
-
-	vector<string>::iterator iter = 
-}
 */
 
 
@@ -499,6 +505,13 @@ void TextBuddy::commandLineInterface(int argc){
 void TextBuddy::showToUser(string text) {
 
 	cout << text << endl;
+}
+
+void TextBuddy::printSearchResult(){
+	int iter = 1;
+	for (vector<string>::iterator i = foundInputs.begin(); i != foundInputs.end(); i++, iter++){
+		print(iter, *i);
+	}
 }
 
 void TextBuddy::print(int lineNumber, string message){

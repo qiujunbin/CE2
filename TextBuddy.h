@@ -40,6 +40,7 @@ private:
 
 	static char buffer[255];
 	static vector<string> userInputs;
+	static vector<string> foundInputs;
 
 	static void enterCommand(string nameOfFile);
 	static void saveToFile(string nameOfFile);
@@ -67,6 +68,7 @@ private:
 
 	static void showToUser(string text);
 	static void print(int lineNumber, string message);
+	static void printSearchResult();
 	static void commandLineInterface(int argc);
 	static void initialiseUserInput(string nameOfFile);
 	static void getFileInputs(string nameOfFile);
