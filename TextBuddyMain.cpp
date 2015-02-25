@@ -507,6 +507,7 @@ void isFound(){
 	vector<string> tempVectorString;
 	vector<string> tempFoundVectorString;
 
+	/*
 	//test 1
 	//this block of code will attempt to find the a single alphabets provided by the user
 	tempVectorString.push_back("H");
@@ -522,8 +523,23 @@ void isFound(){
 	else{																//if code fails
 		cout << "The alphabet 'w' is not found! hence case 1 failed" << endl;
 	}
+	*/
 
+	//test 2
+	//this block of code will attempt to find the exact keyword and phrases provided by the user
+	tempVectorString.push_back("Hi, this is a search");
+	tempVectorString.push_back("Find the little brown fox");
+	tempVectorString.push_back("who jump over the wall");
+	tempVectorString.push_back("can you find it?");
+	printVector(tempVectorString);
+	string keyWord = "who jump over the wall";
 
+	if (search(tempVectorString, tempFoundVectorString, keyWord)){		//if code passes
+		cout << "The keyword who jump over the wall is found!" << endl;
+	}
+	else{																//if code fails
+		cout << "The keyword who jump over the wall is not found! hence case 2 failed" << endl;
+	}
 }
 
 
