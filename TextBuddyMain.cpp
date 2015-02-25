@@ -492,6 +492,7 @@ void checkSorted(){
 	}
 	*/
 
+	/*
 	//test 3
 	//this test for the sorting algorithm for the 1st alphabet (doesnt test for the presence of capital letter)
 	tempVectorString.push_back("B");
@@ -509,7 +510,26 @@ void checkSorted(){
 	else{
 		cout << "The inputs are not sorted based on 1st alphabet, test 3 failed" << endl;
 	}
+	*/
 
+	//test 4
+	//this test will try to sort and solve the problem of capital letters present in the vector
+	//this bunch of inputs will arrange the code according to ABC,abc,BBC,bbc as the correct inputs.
+	tempVectorString.push_back("BBC");
+	tempVectorString.push_back("bbc");
+	tempVectorString.push_back("ABC");
+	tempVectorString.push_back("abc");
+	printVector(tempVectorString);
+	sort(tempVectorString);
+	cout << "After sorting:" << endl;
+	printVector(tempVectorString);
+
+	if (isSorted){
+		cout << "The inputs are sorted based on alphabet" << endl;
+	}
+	else{
+		cout << "The inputs are not sorted based on alphabet, test 4 failed" << endl;
+	}
 }
 
 
