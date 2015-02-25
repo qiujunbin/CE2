@@ -414,46 +414,18 @@ bool isSorted(vector<string> nameOfVector) {
 //this will be the TDD for the search function present written above.
 void isFound(){
 
-	vector<string> tempVectorString;
 
-	//this block of code will attempt to find the exact keyword and phrases provided by the user
-	tempVectorString.push_back("Hi, this is a search");
-	tempVectorString.push_back("Find the little brown fox");
-	tempVectorString.push_back("who jump over the wall");
-	tempVectorString.push_back("can you find it?");
-	printVector(tempVectorString);
-	string keyWord = "who jump over the wall";
-	if (search(tempVectorString, keyWord)){		//if code passes
-		cout << "The keyword who jump over the wall is found!" << endl;
-	}
-	else{										//if code fails
-		cout << "The keyword who jump over the wall is not found!" << endl;
-	}
-
-	//this block of code will attempt to find the exact keyword and phrases provided by the user
-	tempVectorString.push_back("Hi, this is a search");
-	tempVectorString.push_back("Find the little brown fox");
-	tempVectorString.push_back("who jump over the wall");
-	tempVectorString.push_back("can you find it?");
-	printVector(tempVectorString);
-	string keyWord1 = "jump";
-	if (search(tempVectorString, keyWord1)){	//if code passes
-		cout << "The keyword jump is found!" << endl;
-	}
-	else{										//if code fails
-		cout << "The keyword jump is not found!" << endl;
-	}
 	
 }
 
 */
 
+/*
 // This is the TDD functions which will test the sort function written above
 void checkSorted(){
 
 	vector<string> tempVectorString;
 
-	/*
 	//test 1
 	//this test for the sorting algorithm for the 1st alphabet (doesnt test for the presence of capital letter)
 	tempVectorString.push_back("b");
@@ -471,9 +443,7 @@ void checkSorted(){
 	else{
 		cout << "The inputs are not sorted based on 1st alphabet, test 1 failed" << endl;
 	}
-	*/
 
-	/*
 	//test 2
 	//this test for the sorting algorithm for the subsequent alphabets (doesnt test for the presence of capital letter)
 	tempVectorString.push_back("bbc");
@@ -490,9 +460,7 @@ void checkSorted(){
 	else{
 		cout << "The inputs are not sorted based on alphabet, test 2 failed" << endl;
 	}
-	*/
 
-	/*
 	//test 3
 	//this test for the sorting algorithm for the 1st alphabet (doesnt test for the presence of capital letter)
 	tempVectorString.push_back("B");
@@ -510,7 +478,6 @@ void checkSorted(){
 	else{
 		cout << "The inputs are not sorted based on 1st alphabet, test 3 failed" << endl;
 	}
-	*/
 
 	//test 4
 	//this test will try to sort and solve the problem of capital letters present in the vector
@@ -530,8 +497,26 @@ void checkSorted(){
 	else{
 		cout << "The inputs are not sorted based on alphabet, test 4 failed" << endl;
 	}
-}
 
+	//test 5
+	//this test will try to sort and solve the problem of capital letters present in the vector
+	tempVectorString.push_back("This is a test input");
+	tempVectorString.push_back("we would be able to know the truth");
+	tempVectorString.push_back("the tester will carry on to code till its right");
+	tempVectorString.push_back("how about this?");
+	printVector(tempVectorString);
+	sort(tempVectorString);
+	cout << "After sorting:" << endl;
+	printVector(tempVectorString);
+
+	if (isSorted){
+		cout << "The inputs are sorted based on alphabet" << endl;
+	}
+	else{
+		cout << "The inputs are not sorted based on alphabet, test 5 failed" << endl;
+	}
+}
+*/
 
 /*
 
@@ -659,7 +644,7 @@ int main(){
 //int main(int argc, char* argv[]){
 	//check if the user have input the correct number of arguments
 	
-	checkSorted();
+	//checkSorted();
 	system("pause");
 	//isFound();
 
