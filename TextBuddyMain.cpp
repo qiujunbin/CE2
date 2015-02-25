@@ -525,6 +525,7 @@ void isFound(){
 	}
 	*/
 
+	/*
 	//test 2
 	//this block of code will attempt to find the exact keyword and phrases provided by the user
 	tempVectorString.push_back("Hi, this is a search");
@@ -539,6 +540,22 @@ void isFound(){
 	}
 	else{																//if code fails
 		cout << "The keyword who jump over the wall is not found! hence case 2 failed" << endl;
+	}
+	*/
+
+	//test 3
+	//this block of code will attempt to find the exact keyword and phrases provided by the user
+	tempVectorString.push_back("Hi, this is a search");
+	tempVectorString.push_back("Find the little brown fox");
+	tempVectorString.push_back("who jump over the wall");
+	tempVectorString.push_back("can you find it?");
+	printVector(tempVectorString);
+	string keyWord = "jump";
+	if (search(tempVectorString, tempFoundVectorString, keyWord)){	//if code passes
+		cout << "The keyword jump is found!" << endl;
+	}
+	else{															//if code fails
+		cout << "The keyword jump is not found! hence case 3 failed" << endl;
 	}
 }
 
