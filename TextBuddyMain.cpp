@@ -329,7 +329,7 @@ bool TextBuddy::seperateString(string keyWord){
 */
 
 
-
+/*
 void swap(vector<string>& tempVectorString, int target){
 
 	string temp = tempVectorString[target - 1];
@@ -362,12 +362,6 @@ bool lowerCaseSwap(vector<string> tempVectorString, int target){
 	return (tempVectorString[target - 1][0] > tempVectorString[target][0]);
 }
 
-void printVector(vector<string> nameOfVector){
-
-	for (size_t i = 0; i < nameOfVector.size(); i++){
-		cout << nameOfVector[i] << endl;
-	}
-}
 
 void sort(vector<string>& tempVectorString){
 
@@ -408,17 +402,130 @@ bool isSorted(vector<string> nameOfVector) {
 	}
 	return sorted;
 }
+*/
 
-/*
+
+void print(int lineNumber, string message){
+
+	cout << lineNumber << ". " << message << endl;
+}
+
+void printSearchResult(vector<string> tempFoundVectorString){
+	int iter = 1;
+	for (vector<string>::iterator i = tempFoundVectorString.begin(); i != tempFoundVectorString.end(); i++, iter++){
+		print(iter, *i);
+	}
+}
+
+void printVector(vector<string> nameOfVector){
+
+	for (size_t i = 0; i < nameOfVector.size(); i++){
+		cout << nameOfVector[i] << endl;
+	}
+}
+
+
+bool binarySearch(vector<string> tempVectorString, vector<string>& tempFoundVectorString, string keyWord){
+
+	size_t mid, left = 0;
+	size_t right = tempVectorString.size(); // one position passed the right end
+	while (left < right) {
+		mid = left + (right - left) / 2;
+		if (keyWord > tempVectorString[mid]){
+			left = mid + 1;
+		}
+		else if (keyWord < tempVectorString[mid]){
+			right = mid;
+		}
+		else {
+			tempFoundVectorString.push_back(tempVectorString[mid]);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool seperateString(vector<string> tempVectorString, vector<string>& tempFoundVectorString, string keyWord){
+
+	for (size_t i = 0; i < tempVectorString.size(); i++){
+
+		unsigned int tStart = 0;
+		unsigned int tEnd = 0;
+		string temp = "";
+		tEnd = tempVectorString[i].find_first_of(" ,;");
+		while (tEnd != string::npos) {
+			temp = tempVectorString[i].substr(tStart, tEnd - tStart);
+			tStart = tEnd + 1; // start of a new word
+			if (keyWord == temp){
+				tempFoundVectorString.push_back(tempVectorString[i]);
+			}
+			else{
+				tEnd = tempVectorString[i].find_first_of(" ,;", tStart);
+			}
+		}
+		if (tStart < tempVectorString[i].size()){
+			temp = tempVectorString[i].substr(tStart);
+			if (keyWord == temp){
+				tempFoundVectorString.push_back(tempVectorString[i]);
+			}
+		}
+	}
+	if (tempFoundVectorString.size() != 0){
+		return true;
+	}
+	else{
+		return false;
+	}
+
+}
+
+bool search(vector<string> tempVectorString, vector<string>& tempFoundVectorString, string keyWord){
+
+	bool searchResult = false;
+	if (binarySearch(tempVectorString, tempFoundVectorString, keyWord)){
+		searchResult = true;
+	}
+	else{
+		//now we attempt to break the words of each string
+		searchResult = seperateString(tempVectorString, tempFoundVectorString, keyWord);
+	}
+
+	if (searchResult){
+		printSearchResult(tempFoundVectorString);
+		tempFoundVectorString.clear(); //ready vector for next command
+	}
+	else{
+		cout << "Not found"; 
+	}
+	return searchResult;
+
+}
 
 //this will be the TDD for the search function present written above.
 void isFound(){
+	vector<string> tempVectorString;
+	vector<string> tempFoundVectorString;
+
+	//test 1
+	//this block of code will attempt to find the a single alphabets provided by the user
+	tempVectorString.push_back("H");
+	tempVectorString.push_back("F");
+	tempVectorString.push_back("w");
+	tempVectorString.push_back("c");
+	printVector(tempVectorString);
+	string keyWord = "w";
+
+	if (search(tempVectorString, tempFoundVectorString, keyWord)){		//if code passes
+		cout << "The alphabet 'w' is found!" << endl;
+	}
+	else{																//if code fails
+		cout << "The alphabet 'w' is not found! hence case 1 failed" << endl;
+	}
 
 
-	
 }
 
-*/
 
 /*
 // This is the TDD functions which will test the sort function written above
@@ -645,9 +752,9 @@ int main(){
 	//check if the user have input the correct number of arguments
 	
 	//checkSorted();
-	system("pause");
-	//isFound();
 
+	isFound();
+	system("pause");
 	/*
 	if (argc == 1){
 		string fileName;
