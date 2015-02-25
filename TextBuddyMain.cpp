@@ -65,7 +65,7 @@ char TextBuddy::buffer[255] = "";
 vector<string> TextBuddy::userInputs;
 vector<string> TextBuddy::foundInputs;
 
-
+/*
 void TextBuddy::main(int argc, string argv){
 
 	commandLineInterface(argc);
@@ -182,6 +182,8 @@ void TextBuddy::getFileInputs(string nameOfFile){
 
 	readFile.close();
 }
+*/
+/*
 
 string TextBuddy::sort(string nameOfFile){
 
@@ -324,16 +326,90 @@ bool TextBuddy::seperateString(string keyWord){
 	}
 
 }
+*/
 
 
-/*
+
+void swap(vector<string>& tempVectorString, int target){
+
+	string temp = tempVectorString[target - 1];
+	tempVectorString[target - 1] = tempVectorString[target];
+	tempVectorString[target] = temp;
+}
+
+bool checkAnyUpper(vector<string> tempVectorString, int target){
+
+	return (isupper(tempVectorString[target - 1][0]) || isupper(tempVectorString[target][0]));
+}
+
+bool checkSameCharacter(char firstCharacter, char secondCharacter){
+
+	if (firstCharacter - secondCharacter == 0){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+bool upperCaseSwap(vector<string> tempVectorString, int target){
+
+	return (isupper(tempVectorString[target][0]) && islower(tempVectorString[target - 1][0]));
+}
+
+bool lowerCaseSwap(vector<string> tempVectorString, int target){
+
+	return (tempVectorString[target - 1][0] > tempVectorString[target][0]);
+}
+
 void printVector(vector<string> nameOfVector){
 
-	for (int i = 0; i < nameOfVector.size(); i++){
+	for (size_t i = 0; i < nameOfVector.size(); i++){
 		cout << nameOfVector[i] << endl;
 	}
 }
 
+void sort(vector<string>& tempVectorString){
+
+	//implementing a bubble sort
+	for (size_t i = 0; i < tempVectorString.size(); i++){
+		for (size_t j = 1; j < tempVectorString.size(); j++){
+
+			if (checkAnyUpper(tempVectorString, j)){
+				char firstCharacter = tolower(tempVectorString[j - 1][0]);
+				char secondCharacter = tolower(tempVectorString[j][0]);
+
+				if (firstCharacter > secondCharacter){
+					swap(tempVectorString, j);
+				}
+				else if (checkSameCharacter(firstCharacter, secondCharacter)){
+					if (upperCaseSwap(tempVectorString, j)){
+						swap(tempVectorString, j);
+					}
+				}
+			}
+			else{
+				if (lowerCaseSwap(tempVectorString, j)){
+					swap(tempVectorString, j);
+				}
+			}
+		}
+	}
+	cout << "Sort function is executed" << endl;
+}
+
+bool isSorted(vector<string> nameOfVector) {
+
+	bool sorted = true;
+	for (size_t i = 0; i < nameOfVector.size() - 1; i++) {
+		if (tolower(nameOfVector[i][0]) > tolower(nameOfVector[i + 1][0])){
+			sorted = false;
+		}
+	}
+	return sorted;
+}
+
+/*
 
 //this will be the TDD for the search function present written above.
 void isFound(){
@@ -370,37 +446,35 @@ void isFound(){
 	
 }
 
+*/
 
 // This is the TDD functions which will test the sort function written above
 void checkSorted(){
 
 	vector<string> tempVectorString;
 
+	//test 1
 	//this test for the sorting algorithm for the 1st alphabet (doesnt test for the presence of capital letter)
-	tempVectorString.push_back("bbc");
-	tempVectorString.push_back("dbc");
-	tempVectorString.push_back("abc");
-	tempVectorString.push_back("cbc");
+	tempVectorString.push_back("b");
+	tempVectorString.push_back("d");
+	tempVectorString.push_back("a");
+	tempVectorString.push_back("c");
 	printVector(tempVectorString);
 	sort(tempVectorString);
 	cout << "After sorting:" << endl;
 	printVector(tempVectorString);
-
-	//this test will try to sort and solve the problem of capital letters present in the vector
-	//this bunch of inputs will arrange the code according to ABC,abc,BBC,bbc as the correct inputs.
-	tempVectorString.push_back("BBC");
-	tempVectorString.push_back("bbc");
-	tempVectorString.push_back("ABC");
-	tempVectorString.push_back("abc");
-	printVector(tempVectorString);
-	sort(tempVectorString);
-	cout << "After sorting:" << endl;
-	printVector(tempVectorString);
+	
+	if (isSorted){
+		cout << "The inputs are sorted based on 1st alphabet" << endl;
+	}
+	else{
+		cout << "The inputs are not sorted based on 1st alphabet, test 1 failed" << endl;
+	}
 
 }
 
-*/
 
+/*
 
 vector<string>::iterator TextBuddy::getLineNumber(string nameOfFile, string userCommand){
 
@@ -519,20 +593,27 @@ void TextBuddy::print(int lineNumber, string message){
 	cout << lineNumber << ". " << message << endl;
 }
 
+*/
+
 //this is the entry point of the programme. 
-int main(int argc, char* argv[]){
+int main(){
+//int main(int argc, char* argv[]){
 	//check if the user have input the correct number of arguments
 	
-	//checkSorted();
+	checkSorted();
+	system("pause");
 	//isFound();
+
+	/*
 	if (argc == 1){
 		string fileName;
 		cout << "Enter a file name: ";
 		getline(cin, fileName);
-		TextBuddy::main(2, fileName);
+		//TextBuddy::main(2, fileName);
 	}
 	else {
-		TextBuddy::main(argc, argv[1]);
+		//TextBuddy::main(argc, argv[1]);
 	}
+	*/
 	return 0;
 }
